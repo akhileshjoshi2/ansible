@@ -1,0 +1,25 @@
+  register: timestamp_start
+- debug: var=timestamp_start
+- name: install the apache webserveer
+  yum: pkg=httpd state=latest
+  notify: Start HTTPD
+- name: Verify that web server is running
+  command: sytemctl status httpd
+  register: result
+  ignore_errors: yes
+- debug: var=result
+- name: install telnet
+  yum: pkg=telnet state=latest
+- name: install lynx
+  yum: pkg=lynx state=latest
+- name: Log all the packages installed on the system
+  command: yum list installed
+  register: installed_result
+- debug: var=installed_result 
+- name: date/time stamp for when the playbook ends 
+  command: /usr/bin/date
+  register: timestamp_end
+- debug: var=timestamp_end
+handlers: 
+- name: Start HTTPD
+  service: name=httpd state=restarted      

@@ -1,0 +1,19 @@
+--- # Master File For Testrole
+- hosts: apacheweb
+  user: test
+  sudo: yes
+  connection: ssh
+  pre_tasks: 
+  - name: date/time stamp for the playbook starts
+    command: /usr/bin/date
+    register: timestamp_start
+  - debug: var=timestamp_start
+  roles: 
+  - testrole
+  post_tasks:
+  - name: date/time stamp for the playbook ends
+    command: /usr/bin/date
+    register: timestamp_end
+  - debug: var=timestamp_end     
+
+  
