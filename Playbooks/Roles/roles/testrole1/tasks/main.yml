@@ -1,0 +1,22 @@
+- name: Install(REDHAT/Centos) Apache Web Server
+  yum: pkg=httpd state=latest 
+  notify: Start HTTPD
+- name: add a list of software
+  yum: pkg={{ item }} state=latest
+  with_items:
+  - telnet
+  - lynx       
+- name: verify the webservr is running
+  command: systemctl status httpd
+  register: result
+  ignore_errors: yes
+- name: log all the packages install on the system
+  command: yum list installed |grep telnet
+  register: installed_result
+  tags: install_result
+- debug: var=result
+- debug: var=installed_result
+ 
+  
+
+

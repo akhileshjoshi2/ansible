@@ -1,0 +1,14 @@
+--- # MAster playbook for webservers
+- hosts: apacheweb
+  user: test
+  sudo: yes
+  connection: ssh
+  pre_tasks:
+  - name: When did the role run
+    raw: date > /home/test/startofrole
+  roles:
+  - { role: redhat_webservers, when: "ansible_os_family == 'RedHat'" }
+  - { role: debian_webservers, when: "ansible_os_family == 'Debian'" }
+  post_tasks:
+  - name: When did the role end
+    raw: date > /home/test/endofrole 

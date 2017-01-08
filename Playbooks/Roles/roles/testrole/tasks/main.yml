@@ -1,0 +1,24 @@
+- name: Install(REDHAT/Centos) Apache Web Server
+  yum: pkg={{ redhat_apache }} state=latest 
+  when: "ansible_os_family == 'RedHat'"
+  notify: Restart HTTPD
+  ignore_errors: yes  
+- name: add a list of software
+  yum: pkg={{ item }} state=latest
+  with_items:
+  - telnet
+  - lynx        
+  tags: install_list
+- name: verify the webservr is running
+  command: systemctl status httpd
+  register: result
+  ignore_errors: yes
+- name: log all the packages install on the system
+  command: yum list installed |grep telnet
+  register: installed_result
+  tags: install_result
+- debug: var=result
+- debug: var=installed_result
+  
+
+
