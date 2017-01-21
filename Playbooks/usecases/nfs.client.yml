@@ -1,0 +1,13 @@
+--- # MAster playbook for webservers
+- hosts: local
+  user: test
+  sudo: yes
+  connection: ssh
+  pre_tasks:
+  - name: When did the role run
+    raw: date > /home/test/startofrole
+  roles:
+     - nfs.client
+  post_tasks:
+  - name: When did the role end
+    raw: date > /home/test/endofrole 

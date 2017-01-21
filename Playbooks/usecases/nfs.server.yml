@@ -1,0 +1,13 @@
+--- # MAster playbook for nfs server deployment
+- hosts: appserver
+  user: test
+  sudo: yes
+  connection: ssh
+  pre_tasks:
+  - name: When did the role run
+    raw: date > /home/test/startofrole
+  roles:
+     - nfs.server
+  post_tasks:
+  - name: When did the role end
+    raw: date > /home/test/endofrole 

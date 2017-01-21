@@ -1,0 +1,28 @@
+--- #  NFS SERVER PLAYBOOK
+- hosts: appserver
+  user: test
+  sudo : yes
+  connection: ssh
+  gather_facts: yes
+  vars:
+    distribution: RedHat
+    nfsutils_pkg: nfs-utils
+    nfsserver_service: nfs-server
+    nfslock_service: nfs-lock
+    nfsmap_service: nfs-idmap
+    rpcbind_service: rcpbind
+    export_path: /var/share
+    client_path: /mnt/remote
+  tasks:
+  - name: Install the NFS Server Utilities and services.
+    yum: pkg={{ item }} state=latest
+    with_items:
+    - "{{ nfsutils_pkg }}"
+    - httpd
+  - name: Copy the export file to the remote server
+    copy: src=files/exports.template dest=/etc/exports owner=root group=root mode=644
+    notify:
+     - StartServices
+  handlers:
+   - name: StartServices
+     action: service name=rcpbind state=restarted

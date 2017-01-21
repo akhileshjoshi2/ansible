@@ -1,0 +1,16 @@
+- name: InstallClientPackages
+  yum: pkg={{ item }} state=latest
+  with_items:
+  - "{{ nfsutils_pkg }}"
+  notify: StartClientServices
+- name: StartClientServices
+  service: name={{ item }} state=restarted
+  with_items:
+  - rpcbind
+  - nfs-lock
+  - nfs-idmap
+- name: CreateClientMount
+  file: path={{ client_path }} state=directory mode=755
+- name: ClientMountServerResource
+  shell: mount -t nfs satishdasi5.mylabserver.com:{{ export_path }} {{ client_path }}
+  register: result
